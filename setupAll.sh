@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+set -x
 
 mail -s "SocialNetwork instance is setting up!" $(geni-get slice_email)
 

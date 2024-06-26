@@ -1,5 +1,5 @@
 """
-Setup script for deploying train-ticket on CloudLab
+Setup script for deploying Social-Network on CloudLab
 """
 
 # Import the Portal object.
@@ -90,7 +90,7 @@ if params.tempFileSystemSize > 0 or params.tempFileSystemMax:
 
 # Install and execute a script that is contained in the repository.
 node.addService(pg.Execute(shell="bash", command="/local/repository/changeShells.sh"))
-node.addService(pg.Execute(shell="bash", command="/local/repository/setupAll.sh"))
+node.addService(pg.Execute(shell="bash", command="/local/repository/setupAll.sh 2>&1 >/local/setup.log"))
 
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec(request)
