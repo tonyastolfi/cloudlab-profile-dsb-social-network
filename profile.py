@@ -2,9 +2,7 @@
 Setup script for deploying Social-Network on CloudLab
 """
 
-# Import the Portal object.
 import geni.portal as portal
-# Import the ProtoGENI library.
 import geni.rspec.pg as pg
 
 # Create a portal context.
