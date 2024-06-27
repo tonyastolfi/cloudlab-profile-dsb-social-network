@@ -88,7 +88,7 @@ if params.tempFileSystemSize > 0 or params.tempFileSystemMax:
 
 # Install and execute a script that is contained in the repository.
 node.addService(pg.Execute(shell="bash", command="/local/repository/changeShells.sh"))
-node.addService(pg.Execute(shell="bash", command="/local/repository/setupAll.sh 2>&1 >/local/setup.log"))
+node.addService(pg.Execute(shell="bash", command="/local/repository/setupAll.sh"))
 
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec(request)
