@@ -102,7 +102,7 @@ if params.physType != "":
 #
 node.cores = 12   # 1-12 cores allowed
 node.ram = 32768  # 32GiB
-node.disk = 512   # 0.5TiB
+node.disk = 100   # 100GB
 
 # Create a blockstore for the VM.
 #
