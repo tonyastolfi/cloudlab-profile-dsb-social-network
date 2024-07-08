@@ -98,11 +98,12 @@ node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD
 if params.physType != "":
     node.hardware_type = params.physType
 
-# Set the VM size.
-#
-node.cores = 12   # 1-12 cores allowed
-node.ram = 1024   # 1024MB is the max
-node.disk = 100   # 100GB is the max
+if False:
+    # Set the VM size.
+    #
+    node.cores = 12   # 1-12 cores allowed
+    node.ram = 1024   # 1024MB is the max
+    node.disk = 100   # 100GB is the max
 
 # Create a blockstore for the VM.
 #
