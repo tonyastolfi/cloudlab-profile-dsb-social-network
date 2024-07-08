@@ -12,6 +12,7 @@ pc = portal.Context()
 request = pc.makeRequestRSpec()
 
 #==#==========+==+=+=++=+++++++++++-+-+--+----- --- -- -  -  -   -
+#
 if False:
     # Pick your OS.
     imageList = [
@@ -24,7 +25,6 @@ if False:
         ('urn:publicid:IDN+emulab.net+image+emulab-ops//FBSD122-64-STD', 'FreeBSD 12.2'),
         ('urn:publicid:IDN+emulab.net+image+emulab-ops//FBSD114-64-STD', 'FreeBSD 11.4'),
     ]
-
 
     pc.defineParameter("osImage", "Select OS image",
                        portal.ParameterType.IMAGE,
@@ -46,8 +46,8 @@ if False:
                        "The images provided by the system have small root partitions, so use this option " +
                        "if you expect you will need more space to build your software packages or store " +
                        "temporary files.")
-                   
-    # Instead of a size, ask for all available space. 
+
+    # Instead of a size, ask for all available space.
     pc.defineParameter("tempFileSystemMax",  "Temp Filesystem Max Space",
                        portal.ParameterType.BOOLEAN, False,
                        advanced=True,
@@ -69,7 +69,7 @@ if False:
 
     # Add a raw PC to the request.
     node = request.RawPC("node")
-        
+
     # Set OS Image
     if params.osImage and params.osImage != "default":
         node.disk_image = params.osImage
@@ -86,8 +86,11 @@ if False:
         else:
             bs.size = str(params.tempFileSystemSize) + "GB"
         bs.placement = "any"
-        
-    pc.verifyParameters()
+else:
+    params = pc.bindParameters()
+
+pc.verifyParameters()
+#
 #==#==========+==+=+=++=+++++++++++-+-+--+----- --- -- -  -  -   -
 
 node = request.XenVM("node")
