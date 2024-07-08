@@ -101,8 +101,8 @@ if params.physType != "":
 # Set the VM size.
 #
 node.cores = 12   # 1-12 cores allowed
-node.ram = 32768  # 32GiB
-node.disk = 100   # 100GB
+node.ram = 1024   # 1024MB is the max
+node.disk = 100   # 100GB is the max
 
 # Create a blockstore for the VM.
 #
