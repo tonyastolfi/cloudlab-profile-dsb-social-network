@@ -10,6 +10,8 @@ mail -s "SocialNetwork instance is setting up!" $(geni-get slice_email)
     source /local/repository/aptSetup.sh
     source /local/repository/shcSetup.sh
     source /local/repository/dockerSetup.sh
+    source /local/repository/pythonSetup.sh
+    source /local/repository/dsbSetup.sh
 
     echo "Finish: $(date "+%Y-%m-%dT%H-%M-%S")"
 
