@@ -100,7 +100,7 @@ if params.physType != "":
 
 # Set the VM size.
 #
-node.cores = 16
+node.cores = 12   # 1-12 cores allowed
 node.ram = 32768  # 32GiB
 node.disk = 512   # 0.5TiB
 
