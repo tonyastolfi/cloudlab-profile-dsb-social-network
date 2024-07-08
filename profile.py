@@ -13,6 +13,12 @@ request = pc.makeRequestRSpec()
 
 #==#==========+==+=+=++=+++++++++++-+-+--+----- --- -- -  -  -   -
 #
+# Optional physical type for all nodes.
+pc.defineParameter("physType",  "Optional physical node type",
+                   portal.ParameterType.STRING, "",
+                   longDescription="Specify a physical node type (pc3000,d710,etc) " +
+                   "instead of letting the resource mapper choose for you.")
+
 if False:
     # Pick your OS.
     imageList = [
@@ -31,12 +37,6 @@ if False:
                        imageList[0], imageList,
                        longDescription="Most clusters have this set of images, " +
                        "pick your favorite one.")
-
-    # Optional physical type for all nodes.
-    pc.defineParameter("physType",  "Optional physical node type",
-                       portal.ParameterType.STRING, "",
-                       longDescription="Specify a physical node type (pc3000,d710,etc) " +
-                       "instead of letting the resource mapper choose for you.")
 
     # Optional ephemeral blockstore
     pc.defineParameter("tempFileSystemSize", "Temporary Filesystem Size (GB)",
@@ -74,10 +74,6 @@ if False:
     if params.osImage and params.osImage != "default":
         node.disk_image = params.osImage
 
-    # Optional hardware type.
-    if params.physType != "":
-        node.hardware_type = params.physType
-
     # Optional Blockstore
     if params.tempFileSystemSize > 0 or params.tempFileSystemMax:
         bs = node.Blockstore("node-bs", params.tempFileSystemMount)
@@ -98,6 +94,9 @@ node = request.XenVM("node")
 # Set the VM OS image (Ubuntu 22).
 #
 node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD"
+
+if params.physType != "":
+    node.hardware_type = params.physType
 
 # Set the VM size.
 #
