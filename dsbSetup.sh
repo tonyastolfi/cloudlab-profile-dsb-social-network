@@ -2,26 +2,42 @@
 #
 set -Eeuo pipefail
 
-git clone --recurse-submodules --depth 10 https://github.com/delimitrou/DeathStarBench
-
+#=#=#==#==#===============+=+=+=+=++=++++++++++++++-++-+--+-+----+---------------
+# Install prerequisites.
+#
 sudo apt-get update
 sudo apt-get install -y libssl-dev libz-dev luarocks
 sudo luarocks install luasocket
 
+which jq || {
+    sudo apt update && sudo apt install -y jq
+}
+which yq || {
+    pip install yq
+    export PATH=${PATH}:${HOME}/.local/bin
+}
+
 pip install aiohttp
 
 
-function check_port() {
-    port_num=$1
-    service_name=$2
-    {
-        netstat -l | grep ":${port_num}" && {
-            echo "Warning: ${service_name} port (${port_num}) in use!" >2
-            exit 1
-        }
-    } || true    
-}
+#=#=#==#==#===============+=+=+=+=++=++++++++++++++-++-+--+-+----+---------------
+# Clone DeathStarBench.
+#
+cd /local
+git clone --recurse-submodules --depth 10 https://github.com/delimitrou/DeathStarBench
 
-check_port 8080 "Nginx frontend"
-check_port 8081 "media frontend"
-check_port 16686 "Jaeger"
+
+#=#=#==#==#===============+=+=+=+=++=++++++++++++++-++-+--+-+----+---------------
+# Change docker compose yaml using yq to limit port binding
+#
+cd /local/DeathStarBench/socialNetwork
+
+cat docker-compose.yml | \
+    yq -y '.services |= with_entries(if (.value|has("ports")) then .value.ports |= map("127.0.0.1:"+.) else . end)' \
+       >docker-compose-localhost.yml
+
+#=#=#==#==#===============+=+=+=+=++=++++++++++++++-++-+--+-+----+---------------
+# Success!
+#
+touch /local/.dsbSetup.ts
+

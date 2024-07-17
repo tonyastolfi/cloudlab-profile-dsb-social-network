@@ -11,6 +11,9 @@ pc = portal.Context()
 # Create a Request object to start building the RSpec.
 request = pc.makeRequestRSpec()
 
+# (Experimental/Broken) Set to True to request VMs instead of RawPC.
+useVMs = False
+
 #==#==========+==+=+=++=+++++++++++-+-+--+----- --- -- -  -  -   -
 #
 # Optional physical type for all nodes.
@@ -19,7 +22,7 @@ pc.defineParameter("physType",  "Optional physical node type",
                    longDescription="Specify a physical node type (pc3000,d710,etc) " +
                    "instead of letting the resource mapper choose for you.")
 
-if False:
+if not useVMs:
     # Pick your OS.
     imageList = [
         ('default', 'Default Image'),
@@ -82,28 +85,41 @@ if False:
         else:
             bs.size = str(params.tempFileSystemSize) + "GB"
         bs.placement = "any"
+
+    pc.verifyParameters()
 else:
     params = pc.bindParameters()
-
-pc.verifyParameters()
 #
 #==#==========+==+=+=++=+++++++++++-+-+--+----- --- -- -  -  -   -
 
-node = request.XenVM("node")
+if useVMs:
+    node = request.XenVM("node")
 
-# Set the VM OS image (Ubuntu 22).
-#
-node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD"
-
-if params.physType != "":
-    node.hardware_type = params.physType
-
-if False:
-    # Set the VM size.
+    # Set the VM OS image (Ubuntu 22).
     #
-    node.cores = 12   # 1-12 cores allowed
-    node.ram = 1024   # 1024MB is the max
-    node.disk = 100   # 100GB is the max
+    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD"
+
+    if params.physType != "":
+        node.hardware_type = params.physType
+
+    if False:
+        # Set the VM size.
+        #
+        node.cores = 12   # 1-12 cores allowed
+        node.ram = 1024   # 1024MB is the max
+        node.disk = 100   # 100GB is the max
+else:
+    # Add a raw PC to the request.
+    node = request.RawPC("node")
+
+    # Set OS Image
+    if params.osImage and params.osImage != "default":
+        node.disk_image = params.osImage
+
+    # Optional hardware type.
+    if params.physType != "":
+        node.hardware_type = params.physType
+
 
 # Create a blockstore for the VM.
 #
